@@ -7,6 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/http_exception.dart';
 
+
+/// Provider class for authentication data and methods
 class Auth with ChangeNotifier {
   String _token;
   DateTime _expiryDate;
@@ -30,6 +32,8 @@ class Auth with ChangeNotifier {
     return _userId;
   }
 
+  /// Used for registration or login depending on the [urlSegment] entry
+  /// Also calls [_autoLogout] and notifies all listeners once the user's been authenticated.
   Future<void> _authenticate(
       String email, String password, String urlSegment) async {
     final url =
@@ -74,14 +78,18 @@ class Auth with ChangeNotifier {
     }
   }
 
+  /// Used to call authenticate, ordering a signup
   Future<void> signup(String email, String password) async {
     return _authenticate(email, password, 'signupNewUser');
   }
 
+  /// Used to call authenticate, ordering a login
   Future<void> login(String email, String password) async {
     return _authenticate(email, password, 'verifyPassword');
   }
 
+  /// Checks whether there is a token saved, and whether the token is valid
+  /// returns true if token is valid, false otherwise
   Future<bool> tryAutoLogin() async {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('userData')) {
@@ -101,6 +109,7 @@ class Auth with ChangeNotifier {
     return true;
   }
 
+  /// Clears authentication data from the app and SharedPreferences, then notifies listeners, causing logout
   Future<void> logout() async {
     _token = null;
     _userId = null;
@@ -115,6 +124,8 @@ class Auth with ChangeNotifier {
     prefs.clear();
   }
 
+
+  /// A timer that runs till the expiry datetime of the token. On expiry, it forces logout
   void _autoLogout() {
     if (_authTimer != null) {
       _authTimer.cancel();

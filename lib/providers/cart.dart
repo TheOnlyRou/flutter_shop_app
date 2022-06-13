@@ -14,6 +14,7 @@ class CartItem {
   });
 }
 
+/// Provider class for our cart's data and methods
 class Cart with ChangeNotifier {
   Map<String, CartItem> _items = {};
 
@@ -33,6 +34,7 @@ class Cart with ChangeNotifier {
     return total;
   }
 
+  /// Add item to the cart
   void addItem(
     String productId,
     double price,
@@ -63,11 +65,13 @@ class Cart with ChangeNotifier {
     notifyListeners();
   }
 
+  /// Remove an item from cart
   void removeItem(String productId) {
     _items.remove(productId);
     notifyListeners();
   }
 
+  /// Reduce quantity or remove item from cart
   void removeSingleItem(String productId) {
     if (!_items.containsKey(productId)) {
       return;
@@ -87,6 +91,7 @@ class Cart with ChangeNotifier {
     notifyListeners();
   }
 
+  /// Clear the cart 
   void clear() {
     _items = {};
     notifyListeners();

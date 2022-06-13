@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
+
+/// Product Provider class
 class Product with ChangeNotifier {
   final String id;
   final String title;
@@ -20,20 +22,22 @@ class Product with ChangeNotifier {
     this.isFavorite = false,
   });
 
+  /// sets new boolean value for the isFavourite property
   void _setFavValue(bool newValue) {
     isFavorite = newValue;
     notifyListeners();
   }
 
+  /// Toggle the isFavourite property on the server
   Future<void> toggleFavoriteStatus(String token, String userId) async {
     final oldStatus = isFavorite;
     isFavorite = !isFavorite;
     notifyListeners();
     final url =
-        'https://flutter-update.firebaseio.com/userFavorites/$userId/$id.json?auth=$token';
+        'https://flutter-shop-app-a51a9-default-rtdb.europe-west1.firebasedatabase.app/userFavorites/$userId/$id.json?auth=$token';
     try {
       final response = await http.put(
-        url,
+        Uri.parse(url),
         body: json.encode(
           isFavorite,
         ),

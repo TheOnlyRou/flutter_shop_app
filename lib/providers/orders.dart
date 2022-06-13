@@ -19,6 +19,7 @@ class OrderItem {
   });
 }
 
+/// Provider class for Orders
 class Orders with ChangeNotifier {
   List<OrderItem> _orders = [];
   final String authToken;
@@ -30,9 +31,10 @@ class Orders with ChangeNotifier {
     return [..._orders];
   }
 
+  /// Fetches the list of orders from the remote server 
   Future<void> fetchAndSetOrders() async {
-    final url = 'https://flutter-update.firebaseio.com/orders/$userId.json?auth=$authToken';
-    final response = await http.get(url);
+    final url = 'https://flutter-shop-app-a51a9-default-rtdb.europe-west1.firebasedatabase.app/orders/$userId.json?auth=$authToken';
+    final response = await http.get(Uri.parse(url));
     final List<OrderItem> loadedOrders = [];
     final extractedData = json.decode(response.body) as Map<String, dynamic>;
     if (extractedData == null) {
@@ -61,11 +63,12 @@ class Orders with ChangeNotifier {
     notifyListeners();
   }
 
+  /// Used to add orders to the orders list
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
-    final url = 'https://flutter-update.firebaseio.com/orders/$userId.json?auth=$authToken';
+    final url = 'https://flutter-shop-app-a51a9-default-rtdb.europe-west1.firebasedatabase.app/orders/$userId.json?auth=$authToken';
     final timestamp = DateTime.now();
     final response = await http.post(
-      url,
+      Uri.parse(url),
       body: json.encode({
         'amount': total,
         'dateTime': timestamp.toIso8601String(),

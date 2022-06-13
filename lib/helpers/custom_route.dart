@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+
+/// Custom Route class that is used to add a routing animation
+/// used to add animations to unnamed routes
 class CustomRoute<T> extends MaterialPageRoute<T> {
   CustomRoute({
     WidgetBuilder builder,
@@ -26,6 +29,8 @@ class CustomRoute<T> extends MaterialPageRoute<T> {
   }
 }
 
+/// Custom Page Transition builder class that that builds a PageTransitionBuilder
+/// Used to add animations to named routes in main.dart
 class CustomPageTransitionBuilder extends PageTransitionsBuilder {
  @override
   Widget buildTransitions<T>(
